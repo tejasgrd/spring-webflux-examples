@@ -9,4 +9,5 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 
   @Query("SELECT * FROM user WHERE firstname = :firstname")
   Flux<User> findByFirstName(String firstname);
+
 }

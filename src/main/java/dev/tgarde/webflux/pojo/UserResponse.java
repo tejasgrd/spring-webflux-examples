@@ -1,4 +1,4 @@
-package dev.tgarde.webflux.model;
+package dev.tgarde.webflux.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

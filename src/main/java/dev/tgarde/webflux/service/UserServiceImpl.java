@@ -1,11 +1,14 @@
 package dev.tgarde.webflux.service;
 
 import dev.tgarde.webflux.model.User;
-import dev.tgarde.webflux.model.UserResponse;
+import dev.tgarde.webflux.pojo.UserResponse;
+import dev.tgarde.webflux.pojo.UserSaveRequest;
 import dev.tgarde.webflux.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +27,20 @@ public class UserServiceImpl implements UserService {
   @Override
   public Flux<User> findUserByFirstName(String firstName) {
     return userRepository.findByFirstName(firstName);
+  }
+
+  @Override
+  public Mono<UserSaveRequest> saveUser(UserSaveRequest userSaveRequest) {
+    User user = new User();
+    user.setFirstName(userSaveRequest.getFirstName());
+    user.setLastName(userSaveRequest.getLastName());
+    return userRepository.save(user)
+        .thenReturn(userSaveRequest)
+        .doOnError(e -> {
+          if(e != null) {
+            throw new RuntimeException("Exception occurred during data base operation");
+          }
+        });
   }
 
 

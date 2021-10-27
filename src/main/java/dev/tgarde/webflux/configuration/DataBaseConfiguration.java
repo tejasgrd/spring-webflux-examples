@@ -1,5 +1,7 @@
 package dev.tgarde.webflux.configuration;
 
+import dev.miku.r2dbc.mysql.MySqlConnectionConfiguration;
+import dev.miku.r2dbc.mysql.MySqlConnectionFactory;
 import io.r2dbc.spi.ConnectionFactories;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +18,12 @@ public class DataBaseConfiguration extends AbstractR2dbcConfiguration {
 
   @Bean
   public ConnectionFactory connectionFactory() {
-    ConnectionFactory connectionFactory = ConnectionFactories.get(
-        "r2dbcs:mysql://localhost:3306/ExampleDB?"+
-            "zeroDate=use_round&"+
-            "sslMode=disabled");
-
-    return connectionFactory;
+    return MySqlConnectionFactory.from(MySqlConnectionConfiguration.builder()
+        .host("localhost")
+        .port(3306)
+        .username("root")
+        .password("")
+        .database("ExampleDB")
+        .build());
   }
 }
